@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Manager;
 
 use App\Http\Controllers\Controller;
 use App\Models\TimeLog;
+use App\Models\TimeLogAudit;
 
 class TimeLogApprovalController extends Controller
 {
     public function index()
     {
-        $logs = TimeLog::where('status', 'pending')
-            ->with('user')
-            ->orderBy('log_date')
-            ->get();
+      
+$pendingLogs = TimeLog::where('status', 'pending')->with('user')->get();
+$historyLogs = TimeLog::whereIn('status', ['approved', 'rejected'])->with('user')->latest()->get();
 
-        return view('manager.time_logs.index', compact('logs'));
+return view('manager.time_logs.index', compact('pendingLogs', 'historyLogs'));
+
+       
     }
 
     public function approve(TimeLog $timeLog)
@@ -24,7 +26,13 @@ class TimeLogApprovalController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
-        return redirect()->back()->with('success', 'Logi approveitud');
+        TimeLogAudit::create([
+            'time_log_id' => $timeLog->id,
+            'user_id' => auth()->id(),
+            'action' => 'approved',
+        ]);
+
+        return redirect()->back()->with('success', 'Log approved');
     }
 
     public function reject(TimeLog $timeLog)
@@ -34,6 +42,19 @@ class TimeLogApprovalController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
-        return redirect()->back()->with('success', 'Logi tagasi lükatud');
+        TimeLogAudit::create([
+            'time_log_id' => $timeLog->id,
+            'user_id' => auth()->id(),
+            'action' => 'rejected',
+        ]);
+
+        return redirect()->back()->with('success', 'log rejected');
+    }
+
+    public function history(TimeLog $timeLog)
+    {
+        $audits = $timeLog->audits()->with('user')->latest()->get();
+
+        return view('manager.time_logs.history', compact('timeLog', 'audits'));
     }
 }
