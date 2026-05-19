@@ -26,22 +26,12 @@ class TimeLogController extends Controller
     }
 
 
-    public function update(UpdateTimeLogRequest $request, TimeLog $timeLog)
-    {
-   
-        // allow only own log to be updated
-        if ($timeLog->user_id !== auth()->id()) {
-            abort(403);
-        }
+   public function update(UpdateTimeLogRequest $request, TimeLog $timeLog)
+{
+    $this->authorize('update', $timeLog);
 
-  
-        //Lock: can only update if log is not approved
-        if ($timeLog->status === 'approved') {
-            abort(403, 'Approved logi ei saa muuta.');
-        }
+    $timeLog->update($request->validated());
 
-        $timeLog->update($request->validated());
-
-        return redirect()->back()->with('success', 'Logi uuendatud');
-    }
+    return redirect()->back()->with('success', 'Log updated');
+}
 }
