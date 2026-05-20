@@ -10,17 +10,18 @@ class TimeLogApprovalController extends Controller
 {
     public function index()
     {
-      
-$pendingLogs = TimeLog::where('status', 'pending')->with('user')->get();
-$historyLogs = TimeLog::whereIn('status', ['approved', 'rejected'])->with('user')->latest()->get();
 
-return view('manager.time_logs.index', compact('pendingLogs', 'historyLogs'));
+        $pendingLogs = TimeLog::where('status', 'pending')->with('user')->get();
+        $historyLogs = TimeLog::whereIn('status', ['approved', 'rejected'])->with('user')->latest()->get();
 
-       
+        return view('manager.time_logs.index', compact('pendingLogs', 'historyLogs'));
     }
 
     public function approve(TimeLog $timeLog)
     {
+        if ($timeLog->user_id === auth()->id()) {
+            abort(403, 'You cannot approve or reject your own log.');
+        }
         $timeLog->update([
             'status' => 'approved',
             'approved_by' => auth()->id(),
@@ -37,6 +38,9 @@ return view('manager.time_logs.index', compact('pendingLogs', 'historyLogs'));
 
     public function reject(TimeLog $timeLog)
     {
+        if ($timeLog->user_id === auth()->id()) {
+            abort(403, 'You cannot approve or reject your own log.');
+        }
         $timeLog->update([
             'status' => 'rejected',
             'approved_by' => auth()->id(),

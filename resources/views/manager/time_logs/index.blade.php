@@ -16,12 +16,13 @@
             </thead>
             <tbody>
                 @foreach($pendingLogs as $log)
-                   <tr >
+                    <tr>
                         <td class="border px-4 py-2">{{ $log->user->name }}</td>
                         <td class="border px-4 py-2">{{ $log->log_date }}</td>
                         <td class="border px-4 py-2">{{ $log->arrival_time }}</td>
                         <td class="border px-4 py-2">{{ $log->departure_time }}</td>
                         <td class="border px-4 py-2 align-middle">
+                                @if($log->user_id !== auth()->id())
                             <form action="/manager/time-logs/{{ $log->id }}/approve" method="POST" class="inline">
                                 @csrf
                                 <button type="submit"
@@ -32,6 +33,9 @@
                                 <button type="submit"
                                     class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Reject</button>
                             </form>
+                               @else
+        <span class="text-gray-400">Cannot approve own log</span>
+    @endif
                         </td>
                     </tr>
                 @endforeach
@@ -54,15 +58,11 @@
                         <td class="border p-2">{{ $log->user->name }}</td>
                         <td class="border p-2">{{ $log->log_date }}</td>
 
-                        <td class="border p-2">
-
-                            {{ $log->arrival_time }}
+                        <td class="border p-2">{{ $log->arrival_time }}
 
                         </td>
 
-                        <td class="border p-2">
-
-                            {{ $log->departure_time }}
+                        <td class="border p-2">{{ $log->departure_time }}
 
                         </td>
 
