@@ -22,7 +22,7 @@ class TimeLogController extends Controller
 
         TimeLog::create($data);
 
-        return redirect()->back()->with('success', 'Logi salvestatud');
+        return redirect()->back()->with('success', 'Log submitted');
     }
 
 
@@ -30,7 +30,13 @@ class TimeLogController extends Controller
 {
     $this->authorize('update', $timeLog);
 
-    $timeLog->update($request->validated());
+     $timeLog->update(array_merge(
+        $request->validated(),
+        [
+            'status' => 'pending',
+            'approved_by' => null,
+        ]
+    ));
 
     return redirect()->back()->with('success', 'Log updated');
 }
