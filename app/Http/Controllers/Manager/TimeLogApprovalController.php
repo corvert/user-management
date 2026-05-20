@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 use App\Models\TimeLog;
 use App\Models\TimeLogAudit;
+use Illuminate\Support\Facades\Auth;
 
 class TimeLogApprovalController extends Controller
 {
@@ -19,17 +20,17 @@ class TimeLogApprovalController extends Controller
 
     public function approve(TimeLog $timeLog)
     {
-        if ($timeLog->user_id === auth()->id()) {
+        if ($timeLog->user_id === Auth::id()) {
             abort(403, 'You cannot approve or reject your own log.');
         }
         $timeLog->update([
             'status' => 'approved',
-            'approved_by' => auth()->id(),
+            'approved_by' => Auth::id(),
         ]);
 
         TimeLogAudit::create([
             'time_log_id' => $timeLog->id,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'approved',
         ]);
 
@@ -38,17 +39,17 @@ class TimeLogApprovalController extends Controller
 
     public function reject(TimeLog $timeLog)
     {
-        if ($timeLog->user_id === auth()->id()) {
+        if ($timeLog->user_id === Auth::id()) {
             abort(403, 'You cannot approve or reject your own log.');
         }
         $timeLog->update([
             'status' => 'rejected',
-            'approved_by' => auth()->id(),
+            'approved_by' => Auth::id(),
         ]);
 
         TimeLogAudit::create([
             'time_log_id' => $timeLog->id,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'action' => 'rejected',
         ]);
 
