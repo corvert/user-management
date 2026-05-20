@@ -4,6 +4,13 @@
     <div class="max-w-4xl mx-auto py-8">
         <h1 class="text-2xl font-semibold mb-4">My logs</h1>
 
+        <form method="GET" action="/time-logs" class="mb-4 flex gap-2">
+    <input type="date" name="from" value="{{ request('from') }}" class="border p-2">
+    <input type="date" name="to" value="{{ request('to') }}" class="border p-2">
+    <button class="bg-gray-700 text-white px-3 py-2 rounded">Filter</button>
+    <a href="/time-logs/export?from={{ request('from') }}&to={{ request('to') }}"
+       class="bg-blue-600 text-white px-3 py-2 rounded">Export CSV</a>
+</form>
       
         <form action="/time-logs" method="POST" class="mb-6 space-y-2">
             @csrf

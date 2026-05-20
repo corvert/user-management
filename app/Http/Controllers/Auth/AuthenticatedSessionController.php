@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-           if (Auth::user() && !Auth::user()->status) {
+        if (Auth::user() && !Auth::user()->status) {
             Auth::logout();
             throw ValidationException::withMessages([
                 'email' => 'Your account is inactive. Please contact support.',
@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('time-logs.index', absolute: false));
     }
 
     /**

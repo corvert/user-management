@@ -10,8 +10,9 @@
             <x-inputs.text id="password" name="password" label="Password" type="password" required />
             <x-inputs.text id="password_confirmation" name="password_confirmation" label="Password Confirmation"
                 type="password" required />
-            <x-inputs.select id="role" name="role" label="Role" :options="['User' => 'User', 'Manager' => 'Manager']"
-                required />
+            <x-inputs.select id="role" name="role" label="Role" 
+            :options="['User' => 'User', 'Manager' => 'Manager', 'Superadmin' => 'Superadmin']" required />
+              
             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Create User</button>
 
         </form>

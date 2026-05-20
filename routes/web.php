@@ -13,10 +13,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -24,7 +20,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/time-logs', [TimeLogController::class, 'index'])->middleware('can:view logs');
+    Route::get('/time-logs', [TimeLogController::class, 'index'])
+        ->middleware('can:view logs')
+        ->name('time-logs.index');
     Route::post('/time-logs', [TimeLogController::class, 'store'])->middleware('can:create logs');
     Route::patch('/time-logs/{timeLog}', [TimeLogController::class, 'update'])->middleware('can:create logs');
 });
@@ -59,6 +57,7 @@ Route::middleware(['auth', 'can:create roles'])->group(function () {
 
 Route::get('/manager/time-logs/{timeLog}/history', [TimeLogApprovalController::class, 'history'])->middleware(['auth', 'can:approve logs']);
 
-
+Route::get('/time-logs/export', [TimeLogController::class, 'export'])
+    ->middleware(['auth', 'can:view logs']);
 
 require __DIR__ . '/auth.php';

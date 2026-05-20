@@ -9,11 +9,21 @@ use Illuminate\Http\Request;
 
 class TimeLogController extends Controller
 {
-    public function index()
-    {
-         $logs = auth()->user()->timeLogs()->latest('log_date')->get();
-        return view('time_logs.index', compact('logs'));
+  public function index(Request $request)
+{
+    $query = auth()->user()->timeLogs()->orderByDesc('log_date');
+
+    if ($request->filled('from')) {
+        $query->whereDate('log_date', '>=', $request->from);
     }
+    if ($request->filled('to')) {
+        $query->whereDate('log_date', '<=', $request->to);
+    }
+
+    $logs = $query->get();
+
+    return view('time_logs.index', compact('logs'));
+}
 
       public function store(StoreTimeLogRequest $request)
     {
@@ -39,5 +49,44 @@ class TimeLogController extends Controller
     ));
 
     return redirect()->back()->with('success', 'Log updated');
+}
+
+public function export(Request $request)
+{
+    $query = auth()->user()->timeLogs()->orderByDesc('log_date');
+
+    if ($request->filled('from')) {
+        $query->whereDate('log_date', '>=', $request->from);
+    }
+    if ($request->filled('to')) {
+        $query->whereDate('log_date', '<=', $request->to);
+    }
+
+    $logs = $query->get();
+
+    $filename = 'time_logs_' . now()->format('Y-m-d_H-i') . '.csv';
+
+    $headers = [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => "attachment; filename=\"$filename\"",
+    ];
+
+    $callback = function () use ($logs) {
+        $handle = fopen('php://output', 'w');
+        fputcsv($handle, ['Date', 'Arrival', 'Departure', 'Status']);
+
+        foreach ($logs as $log) {
+            fputcsv($handle, [
+                $log->log_date,
+                $log->arrival_time,
+                $log->departure_time,
+                $log->status,
+            ]);
+        }
+
+        fclose($handle);
+    };
+
+    return response()->stream($callback, 200, $headers);
 }
 }
