@@ -1,18 +1,16 @@
-@extends('layout.app')
+@extends('layouts.app')
 @section('content')
     <div class="max-w-5xl mx-auto py-8">
         <h1 class="text-2xl font-semibold mb-4">User Management</h1>
-        @if(session('success'))
-            <div class="mb-4 text-green-600">{{ session('success') }}</div>
-        @endif
 
         <form action="/admin/users" method="POST">
             @csrf
             <x-inputs.text id="name" name="name" label="Name" required />
             <x-inputs.text id="email" name="email" label="Email" type="email" required />
             <x-inputs.text id="password" name="password" label="Password" type="password" required />
-            <x-inputs.text id="password_confirmation" name="password_confirmation" label="Password Confirmation" type="password" required />
-            <x-inputs.select id="role" name="role" label="Role" :options="['user' => 'User', 'manager' => 'Manager', 'admin' => 'Admin']"
+            <x-inputs.text id="password_confirmation" name="password_confirmation" label="Password Confirmation"
+                type="password" required />
+            <x-inputs.select id="role" name="role" label="Role" :options="['User' => 'User', 'Manager' => 'Manager']"
                 required />
             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Create User</button>
 
@@ -37,8 +35,8 @@
                         <td class="border p-2">{{ $user->status ? 'Active' : 'Inactive' }}</td>
 
                         <td class="border p-2">
-                            @if($u->status)
-                                <form method="POST" action="/admin/users/{{ $u->id }}/deactivate">
+                            @if($user->status)
+                                <form method="POST" action="/admin/users/{{ $user->id }}/deactivate">
                                     @csrf
                                     <button class="bg-red-600 text-white px-3 py-1 rounded">Deactivate</button>
                                 </form>

@@ -4,11 +4,6 @@
 <div class="max-w-5xl mx-auto py-8">
     <h1 class="text-2xl font-semibold mb-4">Role Management</h1>
 
-    @if(session('success'))
-    <div class="bg-green-100 text-green-800 p-2 rounded mb-4">
-        {{ session('success') }}
-    </div>
-    @endif
     <form action="/admin/roles" method="POST" class="mb-6 space-y-2">
         @csrf
         <x-inputs.text id="name" name="name" label="Role Name" required />

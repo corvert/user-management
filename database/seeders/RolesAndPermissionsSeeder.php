@@ -47,8 +47,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $superadmin->syncPermissions($permissions);
 
         $manager->syncPermissions([
-            'view users',
-            'view roles',
             'view logs',
             'approve logs',
             'reject logs',
