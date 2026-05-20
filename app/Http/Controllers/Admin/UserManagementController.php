@@ -35,4 +35,11 @@ class UserManagementController extends Controller
         $user->update(['status' => false]);
         return redirect()->back()->with('success', 'User deactivated successfully.');
     }
+
+    public function activate(User $user){
+        $this->authorize('activate users');
+        
+        $user->update(['status' => true]);
+        return redirect()->back()->with('success', 'User activated successfully.');
+    }
 }

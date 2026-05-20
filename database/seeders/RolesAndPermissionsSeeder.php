@@ -20,6 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view users',
             'create users',
             'deactivate users',
+            'activate users',
 
             // Role Management
             'view roles',

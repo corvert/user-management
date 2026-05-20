@@ -46,6 +46,10 @@ Route::middleware(['auth', 'can:deactivate users'])->group(function () {
     Route::post('/admin/users/{user}/deactivate', [UserManagementController::class, 'deactivate']);
 });
 
+Route::middleware(['auth', 'can:activate users'])->group(function () {
+    Route::post('/admin/users/{user}/activate', [UserManagementController::class, 'activate']);
+});
+
 Route::middleware(['auth', 'can:view roles'])->group(function () {
     Route::get('/admin/roles', [RoleManagementController::class, 'index']);
 });

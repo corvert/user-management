@@ -17,7 +17,7 @@
 
         </form>
 
-        <table class="w-full border">
+        <table class="w-full border mt-5">
             <thead>
                 <tr>
                     <th class="border p-2">Name</th>
@@ -41,6 +41,10 @@
                                     @csrf
                                     <button class="bg-red-600 text-white px-3 py-1 rounded">Deactivate</button>
                                 </form>
+                            @else
+                                <form method="POST" action="/admin/users/{{ $user->id }}/activate">
+                                    @csrf
+                                    <button class="bg-green-600 text-white px-3 py-1 rounded">Activate</button>
                             @endif
                         </td>
 
