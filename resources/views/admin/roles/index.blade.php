@@ -16,7 +16,9 @@
         <h2 class="font-semibold mb-2">{{ $role->name }}</h2>
 
         <form method="POST" action="/admin/roles/{{ $role->id }}/permissions">
+                <input type="hidden" name="reason" id="reason-{{ $role->id }}">
             @csrf
+        
             <div class="grid grid-cols-2 gap-2">
                 @foreach($permissions as $perm)
                     <label class="flex items-center gap-2">
@@ -26,12 +28,15 @@
                     </label>
                 @endforeach
             </div>
-            <button class="mt-3 bg-green-600 text-white px-3 py-1 rounded">
-                Save Permissions
-            </button>
+            <button type="button"
+        class="mt-3 bg-green-600 text-white px-3 py-1 rounded"
+        data-role-id="{{ $role->id }}">
+    Save Permissions
+</button>
         </form>
     </div>
     @endforeach
+    <x-inputs.pop-up />
 
 </div>
 @endsection

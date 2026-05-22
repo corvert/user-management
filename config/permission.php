@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Role;
 return [
 
     'models' => [
+        'role' => App\Models\Role::class,
 
         /*
          * When using the "HasPermissions" trait from this package, we need to know which
@@ -28,7 +29,7 @@ return [
          * `Spatie\Permission\Contracts\Role` contract.
          */
 
-        'role' => Role::class,
+       
 
         /*
          * When using the "Teams" feature from this package, we need to know which
@@ -119,6 +120,7 @@ return [
      */
 
     'register_permission_check_method' => true,
+    'events_enabled' => true,
 
     /*
      * When set to true, Laravel\Octane\Events\OperationTerminated event listener will be registered
@@ -136,7 +138,7 @@ return [
      *
      * To enable, set to true, and then create listeners to watch these events.
      */
-    'events_enabled' => false,
+   
 
     /*
      * Teams Feature.
