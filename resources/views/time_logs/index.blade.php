@@ -57,16 +57,20 @@
                         <td class="border p-2">
                             @if($log->status !== 'approved')
                                 <form id="update-log-{{ $log->id }}" method="POST" action="/time-logs/{{ $log->id }}">
+                                    <input type="hidden" name="reason" id="reason-{{ $log->id }}">
                                     @csrf
                                     @method('PATCH')
-                                    <button class="bg-green-600 text-white px-3 py-1 rounded">
-                                        Save
-                                    </button>
+                                    <button type="button"
+        class="mt-3 bg-green-600 text-white px-3 py-1 rounded"
+        data-role-id="{{ $log->id }}">
+    Save 
+</button>
                                 </form>
                             @endif
                         </td>
                     </tr>
                 @endforeach
+                <x-inputs.pop-up />
             </tbody>
         </table>
     </div>

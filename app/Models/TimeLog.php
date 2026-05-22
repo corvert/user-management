@@ -34,4 +34,11 @@ class TimeLog extends Model implements Auditable
     {
         return $this->hasMany(TimeLogAudit::class);
     }
+
+    public function transformAudit(array $data): array
+    {
+        $data['reason'] = request()->input('reason');
+
+        return $data;
+    }
 }

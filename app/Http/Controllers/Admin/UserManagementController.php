@@ -11,13 +11,15 @@ use Spatie\Permission\Models\Role;
 
 class UserManagementController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $users = User::with('roles')->orderBy('name')->get();
         $roles = Role::whereIn('name', ['Manager', 'User'])->get();
         return view('admin.users.index', compact('users', 'roles'));
     }
 
-    public function store(StoreUserRequest $request){
+    public function store(StoreUserRequest $request)
+    {
         $data = $request->validated();
         $user = User::create([
             'name' => $data['name'],
@@ -29,16 +31,26 @@ class UserManagementController extends Controller
         return redirect()->back()->with('success', 'User created successfully.');
     }
 
-    public function deactivate(User $user){
+    public function deactivate(Request $request, User $user)
+    {
         $this->authorize('deactivate users');
-        
+
+        $request->validate([
+            'reason' => ['required', 'string', 'max:1000'],
+        ]);
+
         $user->update(['status' => false]);
         return redirect()->back()->with('success', 'User deactivated successfully.');
     }
 
-    public function activate(User $user){
+    public function activate(Request $request, User $user)
+    {
         $this->authorize('activate users');
-        
+
+        $request->validate([
+            'reason' => ['required', 'string', 'max:1000'],
+        ]);
+
         $user->update(['status' => true]);
         return redirect()->back()->with('success', 'User activated successfully.');
     }

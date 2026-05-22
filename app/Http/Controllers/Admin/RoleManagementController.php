@@ -7,7 +7,8 @@ use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRolePermissionsRequest;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+
+use App\Models\Role;
 
 class RoleManagementController extends Controller
 {

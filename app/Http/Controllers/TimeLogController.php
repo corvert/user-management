@@ -38,6 +38,10 @@ class TimeLogController extends Controller
 
    public function update(UpdateTimeLogRequest $request, TimeLog $timeLog)
 {
+
+    $request->validate([
+            'reason' => ['required', 'string', 'max:1000'],
+        ]);
     $this->authorize('update', $timeLog);
 
      $timeLog->update(array_merge(

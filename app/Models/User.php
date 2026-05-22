@@ -45,4 +45,11 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(TimeLog::class, 'approved_by');
     }
+
+    public function transformAudit(array $data): array
+    {
+        $data['reason'] = request()->input('reason');
+
+        return $data;
+    }
 }

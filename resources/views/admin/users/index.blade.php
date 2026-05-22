@@ -10,9 +10,8 @@
             <x-inputs.text id="password" name="password" label="Password" type="password" required />
             <x-inputs.text id="password_confirmation" name="password_confirmation" label="Password Confirmation"
                 type="password" required />
-            <x-inputs.select id="role" name="role" label="Role" 
-            :options="['User' => 'User', 'Manager' => 'Manager', 'Superadmin' => 'Superadmin']" required />
-              
+            <x-inputs.select id="role" name="role" label="Role" :options="['User' => 'User', 'Manager' => 'Manager', 'Superadmin' => 'Superadmin']" required />
+
             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Create User</button>
 
         </form>
@@ -38,18 +37,24 @@
                         <td class="border p-2">
                             @if($user->status)
                                 <form method="POST" action="/admin/users/{{ $user->id }}/deactivate">
+                                    <input type="hidden" name="reason" id="reason-{{ $user->id }}">
                                     @csrf
-                                    <button class="bg-red-600 text-white px-3 py-1 rounded">Deactivate</button>
+                                    <button type="button" class="bg-red-600 text-white px-3 py-1 rounded"
+                                        data-role-id="{{ $user->id }}">Deactivate</button>
                                 </form>
                             @else
                                 <form method="POST" action="/admin/users/{{ $user->id }}/activate">
+                                    <input type="hidden" name="reason" id="reason-{{ $user->id }}">
                                     @csrf
-                                    <button class="bg-green-600 text-white px-3 py-1 rounded">Activate</button>
+                                    <button type="button" class="bg-green-600 text-white px-3 py-1 rounded"
+                                        data-role-id="{{ $user->id }}">Activate</button>
+                                </form>
                             @endif
                         </td>
 
                     </tr>
                 @endforeach
+                <x-inputs.pop-up />
             </tbody>
         </table>
 

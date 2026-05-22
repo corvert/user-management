@@ -25,6 +25,7 @@ class UpdateRolePermissionsRequest extends FormRequest
         return [
              'permissions' => ['array'],
             'permissions.*' => ['string','exists:permissions,name'],
+            'reason' => ['required','string','max:1000']
         ];
     }
 }
