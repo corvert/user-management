@@ -58,7 +58,7 @@ class TimeLogApprovalController extends Controller
 
     public function history(TimeLog $timeLog)
     {
-        $audits = $timeLog->audits()->with('user')->latest()->get();
+        $audits = $timeLog->timeLogAudits()->with('user')->latest()->get();
 
         return view('manager.time_logs.history', compact('timeLog', 'audits'));
     }

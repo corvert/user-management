@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class TimeLog extends Model
+class TimeLog extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'user_id',
@@ -28,7 +30,7 @@ class TimeLog extends Model
         return $this->belongsTo(User::class, 'approved_by');
     }
 
-    public function audits()
+    public function timeLogAudits()
     {
         return $this->hasMany(TimeLogAudit::class);
     }
