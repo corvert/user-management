@@ -1,8 +1,9 @@
 <div id="reason-modal" class="fixed inset-0 hidden items-center justify-center bg-black/50">
     <div class="bg-white p-6 rounded w-full max-w-md">
   
-        <x-inputs.text-area id="reason-text" name="reason-text" label="Reason for change" rows="3" required class="hidden" />
-        <div class="mt-4 flex justify-end gap-2">
+     <h3 class="text-lg font-semibold mb-2">Reason for change</h3>
+        <textarea id="reason-text" class="w-full border rounded p-2" rows="3" required></textarea>       
+         <div class="mt-4 flex justify-end gap-2">
             <button type="button" id="reason-cancel" class="px-3 py-1 border rounded">Cancel</button>
             <button type="button" id="reason-save" class="px-3 py-1 bg-blue-600 text-white rounded">Save</button>
         </div>
@@ -33,7 +34,15 @@
 
     reasonSave.addEventListener('click', () => {
         const reason = reasonText.value.trim();
-        if (!reason) return;
+        if (!reason) {
+            const error = document.createElement('p');
+            document.getElementById(`reason-text`).classList.add('border-red-500');
+            error.textContent = 'Reason is required.';
+            error.classList.add('text-red-500', 'mt-2');
+            reasonText.insertAdjacentElement('afterend', error);  
+            setTimeout(() => error.remove(), 5000);         
+            return;
+        }
 
         const input = document.getElementById(`reason-${currentRoleId}`);
         input.value = reason;
