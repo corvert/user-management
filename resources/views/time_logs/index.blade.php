@@ -5,13 +5,13 @@
         <h1 class="text-2xl font-semibold mb-4">My logs</h1>
 
         <form method="GET" action="/time-logs" class="mb-4 flex gap-2">
-    <input type="date" name="from" value="{{ request('from') }}" class="border p-2">
-    <input type="date" name="to" value="{{ request('to') }}" class="border p-2">
-    <button class="bg-gray-700 text-white px-3 py-2 rounded">Filter</button>
-    <a href="/time-logs/export?from={{ request('from') }}&to={{ request('to') }}"
-       class="bg-blue-600 text-white px-3 py-2 rounded">Export CSV</a>
-</form>
-      
+            <input type="date" name="from" value="{{ request('from') }}" class="border p-2">
+            <input type="date" name="to" value="{{ request('to') }}" class="border p-2">
+            <button class="bg-gray-700 text-white px-3 py-2 rounded">Filter</button>
+            <a href="/time-logs/export?from={{ request('from') }}&to={{ request('to') }}"
+                class="bg-blue-600 text-white px-3 py-2 rounded">Export CSV</a>
+        </form>
+
         <form action="/time-logs" method="POST" class="mb-6 space-y-2">
             @csrf
             <x-inputs.text id="log_date" type="date" name="log_date" label="Date" required />
@@ -52,22 +52,22 @@
                             @endif
                         </td>
 
-                        <td class="border p-2">{{ $log->status }}</td>
-
-                        <td class="border p-2">
-                            @if($log->status !== 'approved')
+                        <td class="border p-2 text-center">{{ $log->status }}</td>
+                        @if($log->status !== 'approved')
+                        <td class="border p-2 text-center">
+                           
                                 <form id="update-log-{{ $log->id }}" method="POST" action="/time-logs/{{ $log->id }}">
                                     <input type="hidden" name="reason" id="reason-{{ $log->id }}">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="button"
-        class="mt-3 bg-green-600 text-white px-3 py-1 rounded"
-        data-role-id="{{ $log->id }}">
-    Save 
-</button>
+                                    <button type="button" class="mt-3 bg-green-600 text-white px-3 py-1 rounded"
+                                        data-role-id="{{ $log->id }}">
+                                        Save
+                                    </button>
                                 </form>
-                            @endif
+                            
                         </td>
+                        @endif
                     </tr>
                 @endforeach
                 <x-inputs.pop-up />
