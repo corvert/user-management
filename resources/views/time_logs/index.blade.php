@@ -34,10 +34,10 @@
                         <td class="border p-2">{{ $log->log_date }}</td>
                         <td class="border p-2">{{ $log->arrival_time }}</td>
                         <td class="border p-2">{{ $log->departure_time }}</td>
-                        <td class="border p-2">{{ $log->status }}</td>
-                        <td class="border p-2">
-                            @if($log->status !== 'approved')
-                                <div x-data="{ open: false, log: null }">
+                        <td class="border p-2 text-center">{{ $log->status }}</td>
+                        @if($log->status !== 'approved')
+                            <td class="border p-2">
+                                <div x-data="{ open: false, log: null, reasonError: false }">
                                     <button type="button" class="mt-3 bg-blue-600 text-white px-3 py-1 rounded"
                                         @click="open = true; log = { id: {{ $log->id }}, arrival: '{{ $log->arrival_time }}', departure: '{{ $log->departure_time }}' }">
                                         Edit
@@ -54,11 +54,18 @@
                                                 <input class="border rounded px-2 py-1" type="time" name="departure_time"
                                                     value="{{ substr($log->departure_time, 0, 5) }}">
                                                 <label class="block mt-2 mb-1">Reason for change:</label>
-                                                <textarea class="w-full border rounded p-2" rows="3" name="reason"
-                                                    required></textarea>
+                                                <textarea class="w-full border rounded p-2"
+                                                    :class="reasonError ? 'border-red-500' : 'border-gray-300'" rows="3"
+                                                    name="reason" @input="reasonError = false" x-ref="reason">
+                                                                    </textarea>
+                                                <p x-show="reasonError" class="text-red-500 text-sm mt-1">
+                                                    Reason is required.
+                                                </p>
                                                 <div class="mt-3 flex gap-2">
-                                                    <button type="submit"
-                                                        class="px-3 py-1 bg-blue-600 text-white rounded">Save</button>
+                                                    <button type="button" class="px-3 py-1 bg-blue-600 text-white rounded"
+                                                        @click="if ($refs.reason.value.trim() === '') { reasonError = true } else { $el.closest('form').submit() }">
+                                                        Save
+                                                    </button>
                                                     <button type="button" class="px-3 py-1 border rounded"
                                                         @click="open = false">Cancel</button>
                                                 </div>
@@ -66,8 +73,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            @endif
-                        </td>
+                            </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
