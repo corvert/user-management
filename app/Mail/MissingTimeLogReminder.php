@@ -28,7 +28,7 @@ class MissingTimeLogReminder extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Missing Time Log Reminder',
+            subject: 'Reminder: Missing Time Log',
         );
     }
 
@@ -54,7 +54,7 @@ class MissingTimeLogReminder extends Mailable
 
     public function build(){
         return $this->subject('Reminder: Missing Time log for ' . $this->date)
-            ->view('emails.missing_time_log_reminder');
+            ->view('emails.missing_time_log');
          
     }
 }

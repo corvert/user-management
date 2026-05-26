@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@php
+    function decodeAuditValues($value): array {
+        if (is_array($value)) return $value;
+        if (is_null($value)) return [];
+        $decoded = json_decode($value, true);
+        if (is_string($decoded)) $decoded = json_decode($decoded, true);
+        return is_array($decoded) ? $decoded : [];
+    }
+@endphp
+
 @section('content')
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-semibold mb-4">Audits</h1>
@@ -25,31 +35,31 @@
                         <td class="border p-2">{{ $audit->user_type }}</td>
                         <td class="border p-2">{{ $audit->user?->name }}</td>
                         <td class="border p-2">{{ $audit->auditable_type }} with ID - {{ $audit->auditable_id }}</td>
+
                         <td class="border p-2">
-                            @if (is_array($audit->old_values))
-                                @foreach ($audit->old_values as $key => $value)
-                                    <div><strong>{{ $key }}:</strong> {{ $value }}</div>
-                                @endforeach
-                            @else
-                                {{ $audit->old_values }}
-                            @endif
+                            @foreach (decodeAuditValues($audit->old_values) as $key => $value)
+                                <div>
+                                    <strong>{{ $key }}:</strong>
+                                    {{ is_array($value) ? implode(', ', $value) : $value }}
+                                </div>
+                            @endforeach
                         </td>
 
                         <td class="border p-2">
-                            @if (is_array($audit->new_values))
-                                @foreach ($audit->new_values as $key => $value)
-                                    <div><strong>{{ $key }}:</strong> {{ $value }}</div>
-                                @endforeach
-                            @else
-                                {{ $audit->new_values }}
-                            @endif
+                            @foreach (decodeAuditValues($audit->new_values) as $key => $value)
+                                <div>
+                                    <strong>{{ $key }}:</strong>
+                                    {{ is_array($value) ? implode(', ', $value) : $value }}
+                                </div>
+                            @endforeach
                         </td>
+
                         <td class="border p-2">{{ $audit->reason }}</td>
                         <td class="border p-2">{{ $audit->created_at }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td class="border p-2" colspan="8">No audits found.</td>
+                        <td class="border p-2" colspan="9">No audits found.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -57,7 +67,5 @@
         <div class="mt-4">
             {{ $audits->links() }}
         </div>
-
-
     </div>
 @endsection
