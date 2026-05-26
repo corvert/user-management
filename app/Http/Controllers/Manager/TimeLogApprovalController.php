@@ -23,6 +23,9 @@ class TimeLogApprovalController extends Controller
         if ($timeLog->user_id === Auth::id()) {
             abort(403, 'You cannot approve or reject your own log.');
         }
+        if ($timeLog->status !== 'pending') {
+            abort(422, 'Only pending logs can be approved or rejected.');
+        }
         $timeLog->update([
             'status' => 'approved',
             'approved_by' => Auth::id(),
@@ -41,6 +44,10 @@ class TimeLogApprovalController extends Controller
     {
         if ($timeLog->user_id === Auth::id()) {
             abort(403, 'You cannot approve or reject your own log.');
+        }
+
+        if ($timeLog->status !== 'pending') {
+            abort(422, 'Only pending logs can be approved or rejected.');
         }
         $timeLog->update([
             'status' => 'rejected',
