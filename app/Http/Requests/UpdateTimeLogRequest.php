@@ -25,6 +25,7 @@ class UpdateTimeLogRequest extends FormRequest
          return [
             'arrival_time'   => ['nullable', 'date_format:H:i'],
             'departure_time' => ['nullable', 'date_format:H:i', 'after:arrival_time'],
+            'reason' => ['required', 'string', 'max:1000'],
         ];
     
     }
