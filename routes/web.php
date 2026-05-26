@@ -6,6 +6,7 @@ use App\Http\Controllers\TimeLogController;
 use App\Http\Controllers\Manager\TimeLogApprovalController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\RoleManagementController;
+use App\Http\Controllers\AuditController;
 
 
 
@@ -63,5 +64,9 @@ Route::get('/manager/time-logs/{timeLog}/history', [TimeLogApprovalController::c
 
 Route::get('/time-logs/export', [TimeLogController::class, 'export'])
     ->middleware(['auth', 'can:view logs']);
+
+Route::middleware(['auth', 'can:view audits'])->group(function () {
+    Route::get('/audits', [AuditController::class, 'index']);
+});
 
 require __DIR__ . '/auth.php';

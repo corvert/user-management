@@ -33,6 +33,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'deactivate logs',
             'approve logs', // manager action
             'reject logs',  // manager action
+
+            // Auditing
+            'view audits',
         ];
 
         foreach ($permissions as $permission) {

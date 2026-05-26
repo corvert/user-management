@@ -36,6 +36,12 @@
                             Role Management
                         </x-nav-link>
                     @endcan
+
+                        @can('view audits')
+                            <x-nav-link href="/audits" :active="request()->is('audits')">
+                                Audits
+                            </x-nav-link>
+                        @endcan
                 </div>
             </div>
 

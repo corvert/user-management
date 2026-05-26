@@ -36,7 +36,7 @@
                         <td class="border p-2">{{ $log->departure_time }}</td>
                         <td class="border p-2 text-center">{{ $log->status }}</td>
                         @if($log->status !== 'approved')
-                            <td class="border p-2">
+                            <td class="border p-2 text-center">
                                 <div x-data="{ open: false, log: null, reasonError: false }">
                                     <button type="button" class="mt-3 bg-blue-600 text-white px-3 py-1 rounded"
                                         @click="open = true; log = { id: {{ $log->id }}, arrival: '{{ $log->arrival_time }}', departure: '{{ $log->departure_time }}' }">
@@ -56,8 +56,7 @@
                                                 <label class="block mt-2 mb-1">Reason for change:</label>
                                                 <textarea class="w-full border rounded p-2"
                                                     :class="reasonError ? 'border-red-500' : 'border-gray-300'" rows="3"
-                                                    name="reason" @input="reasonError = false" x-ref="reason">
-                                                                    </textarea>
+                                                    name="reason" @input="reasonError = false" x-ref="reason"></textarea>
                                                 <p x-show="reasonError" class="text-red-500 text-sm mt-1">
                                                     Reason is required.
                                                 </p>
@@ -79,5 +78,7 @@
                 @endforeach
             </tbody>
         </table>
+      
+
     </div>
 @endsection
